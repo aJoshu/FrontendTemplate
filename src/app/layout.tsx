@@ -11,7 +11,7 @@ import AppWrapper from "./AppWrapper";
 
 export const metadata: Metadata = {
   title: "Projct.gg",
-  description: "Seo desc",
+  description: "Link In Bio, share all your links in one place",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",

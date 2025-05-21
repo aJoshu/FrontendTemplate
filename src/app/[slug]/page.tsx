@@ -42,12 +42,39 @@ export default async function CardPage({ params }: PageProps) {
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata() {
-  return {
-    title: 'Projct Card',
-  };
-}
-
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return [];
+}
+
+
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const card = await getCardBySlug(params.slug);
+
+  if (!card) return { title: 'Card not found' };
+
+  return {
+    title: card.title || 'Projct Card',
+    description: card.description || 'Check out this project showcase',
+    openGraph: {
+      title: card.title,
+      description: card.description,
+      url: `https://projct.dev/${card.slug}`,
+      siteName: 'Projct',
+      images: [
+        {
+          url: `https://projct.dev/api/og/${card.slug}`, // Optional: dynamic OG image
+          width: 1200,
+          height: 630,
+          alt: card.title,
+        },
+      ],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: card.title,
+      description: card.description,
+      images: [`https://projct.dev/api/og/${card.slug}`], // Optional: Twitter OG image
+    },
+  };
 }
