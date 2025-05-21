@@ -349,7 +349,7 @@ export default function DefaultCard({
 
                                     <Button
                                         component="a"
-                                        href={normalizeUrl(project.link) || "#"}
+                                        href={`${normalizeUrl(project.link)}${project.link.includes('?') ? '&' : '?'}ref=projct.dev`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         radius={buttonRadius}
