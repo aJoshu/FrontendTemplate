@@ -111,7 +111,7 @@ export default function Home() {
               title="Projct"
               description="All your links in one place"
               projects={[
-                { title: "Create Link", link: "https://brainstorm.gg" },
+                { title: "Create Link", link: "https://projct.dev/create" },
                 { title: "Follow us", link: "https://x.com/JoshMcrk" },
               ]}
               editor={false}
