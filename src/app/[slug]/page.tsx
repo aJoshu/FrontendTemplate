@@ -4,20 +4,18 @@ import { lightenHexColor } from '@/components/lightenHexColor';
 import { notFound } from 'next/navigation';
 
 type PageProps = {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 };
 
 export default async function CardPage({ params }: PageProps) {
-  const { slug } = await params;
-  const card = await getCardBySlug(slug);
+  const { slug } = params;
 
-  if (!card) return notFound();
-  
+  // Avoid conflicts with public files like /favicon.ico, /robots.txt, etc.
   const reservedSlugs = ['favicon.ico', 'robots.txt', 'sitemap.xml', 'og.png'];
-  if (reservedSlugs.includes(slug)) {
-    return notFound(); // Or redirect, if you prefer
-  }
+  if (reservedSlugs.includes(slug)) return notFound();
 
+  const card = await getCardBySlug(slug);
+  if (!card) return notFound();
 
   return (
     <div className="overflow-hidden">
@@ -52,11 +50,13 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return [];
 }
 
-
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const card = await getCardBySlug(params.slug);
-
-  if (!card) return { title: 'Card not found' };
+  if (!card) {
+    return {
+      title: 'Card not found',
+    };
+  }
 
   return {
     title: card.title || 'Projct Card',
