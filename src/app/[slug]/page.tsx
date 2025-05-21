@@ -60,21 +60,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       description: card.description,
       url: `https://projct.dev/${card.slug}`,
       siteName: 'Projct',
-      images: [
-        {
-          url: `https://projct.dev/api/og/${card.slug}`, // Optional: dynamic OG image
-          width: 1200,
-          height: 630,
-          alt: card.title,
-        },
-      ],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
       title: card.title,
       description: card.description,
-      images: [`https://projct.dev/api/og/${card.slug}`], // Optional: Twitter OG image
     },
   };
 }
