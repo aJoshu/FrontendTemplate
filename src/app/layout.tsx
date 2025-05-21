@@ -10,7 +10,7 @@ import { Notifications } from "@mantine/notifications";
 import AppWrapper from "./AppWrapper";
 
 export const metadata: Metadata = {
-  title: "Projct.gg",
+  title: "Projct.dev",
   description: "Link In Bio, share all your links in one place",
   icons: {
     icon: "/favicon.ico",

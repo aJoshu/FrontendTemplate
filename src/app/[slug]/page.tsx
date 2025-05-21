@@ -70,20 +70,11 @@ export async function generateMetadata({ params }: any) {
       url: `https://projct.dev/${card.slug}`,
       siteName: 'Projct',
       type: 'website',
-      images: [
-        {
-          url: `https://projct.dev/api/og/${card.slug}`,
-          width: 1200,
-          height: 630,
-          alt: card.title,
-        },
-      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: card.title,
       description: card.description,
-      images: [`https://projct.dev/api/og/${card.slug}`],
     },
   };
 }
