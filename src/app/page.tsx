@@ -6,7 +6,20 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import DefaultCard from "./templates/card/default"; // Adjust path if needed
 
-const PRESET_THEMES = [
+
+type ButtonRadius = "xs" | "sm" | "md" | "lg" | "xl";
+
+type Theme = {
+  bgColor: string;
+  buttonColor: string;
+  effect: string;
+  buttonRadius: ButtonRadius;
+  showGit: boolean;
+  githubUsername: string;
+};
+
+
+const PRESET_THEMES: Theme[] = [
   {
     bgColor: "#ffffff",
     buttonColor: "#ef4444",
@@ -110,6 +123,7 @@ export default function Home() {
               githubUsername={theme.githubUsername}
               bottomText="Create in 3 clicks"
               size="full"
+              cardId={""}
             />
           </div>
         </motion.div>

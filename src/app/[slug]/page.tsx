@@ -3,8 +3,13 @@ import DefaultCard from '../templates/card/default';
 import { lightenHexColor } from '@/components/lightenHexColor';
 import { notFound } from 'next/navigation';
 
-export default async function CardPage({ params }: { params: { slug: string } }) {
-  const card = await getCardBySlug(params.slug); // new function
+type PageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export default async function CardPage({ params }: PageProps) {
+  const { slug } = await params;
+  const card = await getCardBySlug(slug);
 
   if (!card) return notFound();
 
@@ -13,7 +18,7 @@ export default async function CardPage({ params }: { params: { slug: string } })
       <div
         className="flex justify-center items-center min-h-screen"
         style={{
-          background: `linear-gradient(145deg, ${lightenHexColor(card.bgColor, 10)}, ${lightenHexColor(card.bgColor, 30)})`
+          background: `linear-gradient(145deg, ${lightenHexColor(card.bgColor, 10)}, ${lightenHexColor(card.bgColor, 30)})`,
         }}
       >
         <DefaultCard
@@ -35,3 +40,14 @@ export default async function CardPage({ params }: { params: { slug: string } })
   );
 }
 
+export const dynamic = 'force-dynamic';
+
+export async function generateMetadata() {
+  return {
+    title: 'Projct Card',
+  };
+}
+
+export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
+  return [];
+}

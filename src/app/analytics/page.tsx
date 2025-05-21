@@ -60,8 +60,10 @@ export default function AnalyticsDashboard() {
   const [cardId, setCardId] = useState('');
   const [analytics, setAnalytics] = useState<{ views: any[]; clicks: any[] }>({ views: [], clicks: [] });
   const { user } = useAuth();
-  const wasAuthenticated = typeof window !== "undefined" && localStorage.getItem("wasAuthenticated") === "true";
-
+  const isClient = typeof window !== 'undefined';
+  const wasAuthenticated = isClient && localStorage.getItem('wasAuthenticated') === 'true';
+  
+  
   useEffect(() => {
     (async () => {
       try {
@@ -83,7 +85,7 @@ export default function AnalyticsDashboard() {
   const totalViews = useMemo(() => data.reduce((acc, cur) => acc + cur.count, 0), [data]);
   const topProjects = useMemo(() => getTopClickedProjects(analytics.clicks), [analytics.clicks]);
 
-  if (!user && !wasAuthenticated) {
+  if (isClient && !user && !wasAuthenticated) {
     localStorage.setItem("redirectPath", "/analytics");
     return <Login />;
   }

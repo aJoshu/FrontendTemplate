@@ -19,11 +19,13 @@ interface CreateCardPayload {
   githubUsername?: string;
 }
 
-
 export const createCardAPI = async (card: CreateCardPayload) => {
   try {
-    const idToken = localStorage.getItem("firebaseIdToken");
-    if (!idToken) throw new Error("No auth token found");
+    let idToken = '';
+    if (typeof window !== 'undefined') {
+      idToken = localStorage.getItem("firebaseIdToken") || '';
+      if (!idToken) throw new Error("No auth token found");
+    }
 
     const normalizedCard = {
       ...card,
@@ -49,10 +51,10 @@ export const createCardAPI = async (card: CreateCardPayload) => {
   }
 };
 
+
 function normalizeUrl(url: string): string {
   if (!/^https?:\/\//i.test(url)) {
     return "https://" + url;
   }
   return url;
 }
-

@@ -494,7 +494,7 @@ export default function DefaultCard({
                                         boxShadow: bgColor === color ? `0 0 0 2px #000` : undefined,
                                     }}
                                     onClick={() => {
-                                        setBgColor(color);
+                                        setBgColor?.(color);
                                         setModalOpened(false);
                                     }}
                                 />
@@ -516,7 +516,7 @@ export default function DefaultCard({
                                         boxShadow: buttonColor === color ? `0 0 0 2px #000` : undefined,
                                     }}
                                     onClick={() => {
-                                        setButtonColor(color);
+                                        setButtonColor?.(color);
                                         setModalOpened(false);
                                     }}
                                 />
@@ -525,7 +525,7 @@ export default function DefaultCard({
                         <h2 className="text-sm font-medium text-gray-500 mb-2 mt-4">Button radius</h2>
                         <select
                             value={buttonRadius}
-                            onChange={(e) => { setButtonRadius(e.target.value as typeof buttonRadius); setModalOpened(false); }}
+                            onChange={(e) => { setButtonRadius?.(e.target.value as typeof buttonRadius); setModalOpened(false); }}
                             className="w-full px-2 py-2 rounded-md text-xs font-mono transition border border-gray-300"
                         >
                             {BUTTON_RADIUS_OPTIONS.map((r) => (

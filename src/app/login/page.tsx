@@ -34,24 +34,26 @@ export default function Login() {
   const [values, setValues] = useState<string[]>(Array(codeLength).fill(""));
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
-
   const redirect = () => {
-    const redirectPath = localStorage.getItem("redirectPath");
-    if (redirectPath) {
-      window.location.href = redirectPath;
-      localStorage.removeItem("redirectPath");
-    } else {
-      window.location.href = '/create';
+    if (typeof window !== 'undefined') {
+      const redirectPath = localStorage.getItem("redirectPath");
+      if (redirectPath) {
+        window.location.href = redirectPath;
+        localStorage.removeItem("redirectPath");
+      } else {
+        window.location.href = '/create';
+      }
     }
-  }
-
-
+  };
+  
   const handleLogin = async () => {
     try {
       setLoading(true);
       const res = await loginAPI(email, password);
       const { idToken } = await signInWithCustomTokenFunc(res.token);
-      localStorage.setItem("firebaseIdToken", idToken);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem("firebaseIdToken", idToken);
+      }
       redirect();
     } catch (err) {
       console.error("Login failed:", err);
@@ -59,7 +61,6 @@ export default function Login() {
       setLoading(false);
     }
   };
-
 
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Backspace" && !values[index] && index > 0) {
@@ -103,7 +104,9 @@ export default function Login() {
       setLoading(true);
       const res = await signupAPI(email, password, values.join(""));
       const { idToken } = await signInWithCustomTokenFunc(res.authToken);
-      localStorage.setItem("firebaseIdToken", idToken);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem("firebaseIdToken", idToken);
+      }
       redirect();
     } catch (err) {
       console.error("Signup failed:", err);
@@ -129,7 +132,7 @@ export default function Login() {
   };
 
   const setPasswordReset = async () => {
-    if(!email)customNotification( "Error", "Email required!", );;
+    if (!email) customNotification("Error", "Email required!",);;
     try {
       await sendPasswordResetEmail(auth, email);
       customNotification(
@@ -193,7 +196,9 @@ export default function Login() {
                           });
                           inputsRef.current[Math.min(codeLength - 1, newValues.length)]?.focus();
                         }}
-                        ref={(el) => (inputsRef.current[index] = el)}
+                        ref={(el) => {
+                          inputsRef.current[index] = el;
+                        }}
                         maxLength={1}
                         inputMode="numeric"
                         className="text-center font-mono"

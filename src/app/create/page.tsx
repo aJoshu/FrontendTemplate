@@ -1,18 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import DefaultCard from "../templates/card/default";
 import { createCardAPI } from "@/api/card/createCard";
-import { BASE_URL, LOCAL_URL } from "@/constants/Network";
+import { LOCAL_URL } from "@/constants/Network";
 import {
     Button,
     Text,
-    Paper,
-    Stack,
     CopyButton,
     Tooltip,
-    Container,
 } from "@mantine/core";
 import { motion } from "framer-motion";
 import { fetchUserCards } from "@/api/card/getUserCards";
@@ -30,11 +26,9 @@ export default function CreatePage() {
     const { user } = useAuth();
     const wasAuthenticated = typeof window !== "undefined" && localStorage.getItem("wasAuthenticated") === "true";
 
-    const router = useRouter();
     const [displayName, setDisplayName] = useState("");
     const [description, setDescription] = useState("");
     const [projects, setProjects] = useState<Project[]>([]);
-    const [editorMode, setEditorMode] = useState(true);
     const [loading, setLoading] = useState(false);
 
     const [bgColor, setBgColor] = useState("#3b82f6");
@@ -117,8 +111,10 @@ export default function CreatePage() {
 
 
     if (!user && !wasAuthenticated) {
-        localStorage.setItem("redirectPath", "/create");
-        return <Login />;
+        if (typeof window !== 'undefined') {
+            localStorage.setItem("redirectPath", "/create");
+            return <Login />;
+        }
     }
 
     if (loading) return null;
@@ -132,7 +128,7 @@ export default function CreatePage() {
                 description={description}
                 setDescription={setDescription}
                 projects={projects}
-                editor={editorMode}
+                editor={true}
                 onDelete={handleDelete}
                 onChange={handleChange}
                 onAdd={handleAdd}

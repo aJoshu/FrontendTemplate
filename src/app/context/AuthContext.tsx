@@ -52,63 +52,73 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         // 🔁 Handle Google Redirect result (first thing on app load)
-        getRedirectResult(auth)
-            .then(async (result) => {
+        if (typeof window !== "undefined") {
+            getRedirectResult(auth)
+              .then(async (result) => {
                 if (result?.user) {
-                    const idToken = await result.user.getIdToken();
-                    await loginWithGoogle(idToken); // optional: call your backend to store session etc.
-                    localStorage.removeItem("redirectPath");
+                  const idToken = await result.user.getIdToken();
+                  await loginWithGoogle(idToken);
+                  localStorage.removeItem("redirectPath");
                 }
-            })
-            .catch((error) => {
+              })
+              .catch((error) => {
                 console.error("Redirect login error:", error);
-            });
+              });
+          }
 
-        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+          const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setFirebaseUser(currentUser);
-
+          
             if (currentUser) {
-                localStorage.setItem('wasAuthenticated', 'true');
-                const idToken = await currentUser.getIdToken();
-                setToken(idToken);
-                localStorage.setItem('firebaseIdToken', idToken);
-
-                try {
-                    const response = await fetch(`${BASE_URL}/api/fetchuser`, {
-                        headers: {
-                            Authorization: `Bearer ${idToken}`,
-                        },
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        setUserCustomData({
-                            subscription: data.subscription || null,
-                            role: data.role || 'default',
-                        });
-                    } else {
-                        console.warn('Failed to fetch user data:', response.status);
-                        setUserCustomData(null);
-                    }
-                } catch (error) {
-                    console.error('Error fetching user profile:', error);
-                    setUserCustomData(null);
+              if (typeof window !== "undefined") {
+                localStorage.setItem("wasAuthenticated", "true");
+              }
+          
+              const idToken = await currentUser.getIdToken();
+              setToken(idToken);
+          
+              if (typeof window !== "undefined") {
+                localStorage.setItem("firebaseIdToken", idToken);
+              }
+          
+              try {
+                const response = await fetch(`${BASE_URL}/api/fetchuser`, {
+                  headers: { Authorization: `Bearer ${idToken}` },
+                });
+          
+                if (response.ok) {
+                  const data = await response.json();
+                  setUserCustomData({
+                    subscription: data.subscription || null,
+                    role: data.role || "default",
+                  });
+                } else {
+                  setUserCustomData(null);
                 }
-
+              } catch (err) {
+                console.error("Error fetching user profile:", err);
+                setUserCustomData(null);
+              }
+          
+              if (typeof window !== "undefined") {
                 const redirectPath = localStorage.getItem("redirectPath");
                 if (redirectPath) {
-                    localStorage.removeItem("redirectPath");
-                    window.location.href = redirectPath;
+                  localStorage.removeItem("redirectPath");
+                  window.location.href = redirectPath;
                 }
-
+              }
+          
             } else {
-                localStorage.removeItem('wasAuthenticated');
-                setToken('');
-                setUserCustomData(null);
+              if (typeof window !== "undefined") {
+                localStorage.removeItem("wasAuthenticated");
+              }
+              setToken("");
+              setUserCustomData(null);
             }
-
+          
             setLoading(false);
-        });
+          });
+          
 
         return () => {
             unsubscribe();
@@ -135,8 +145,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         ? { ...firebaseUserData, ...userCustomData }
         : null;
 
-    const getToken = () => token || localStorage.getItem('firebaseIdToken') || '';
-
+        const getToken = () => {
+            if (typeof window !== "undefined") {
+              return token || localStorage.getItem("firebaseIdToken") || '';
+            }
+            return token;
+          };
+          
     return (
         <AuthContext.Provider value={{ user: combinedUser, token, loading, getToken }}>
             {children}
