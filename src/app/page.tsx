@@ -128,6 +128,17 @@ export default function Home() {
           </div>
         </motion.div>
       </div>
+      <a
+        href="https://www.producthunt.com/posts/projct-dev-link-in-bio?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-projct&#0045;dev&#0045;link&#0045;in&#0045;bio"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=968602&theme=light&t=1747868600349"
+          alt="Projct&#0046;dev&#0032;Link&#0045;In&#0045;Bio - Showcase&#0032;your&#0032;side&#0032;projects&#0032;in&#0032;one&#0032;beautiful&#0032;card | Product Hunt"
+          style={{ width: 250, height: 54 }}
+        />
+      </a>
     </AppShell>
   );
 }
