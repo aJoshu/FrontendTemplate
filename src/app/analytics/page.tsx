@@ -69,9 +69,8 @@ export default function AnalyticsDashboard() {
       try {
         const cards = await fetchUserCards();
         if (!cards?.length) return;
-        setCardId(cards[0].id);
+        setCardId(cards[0].slug);
         const analyticsData = await getCardAnalytics();
-        console.log(cards[0].id)
         setAnalytics(analyticsData);
       } catch (err) {
         console.error("Analytics load failed", err);

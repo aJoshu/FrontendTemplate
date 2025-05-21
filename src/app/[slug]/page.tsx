@@ -10,7 +10,6 @@ type PageProps = {
 export default async function CardPage({ params }: PageProps) {
   const { slug } = params;
 
-  // Avoid conflicts with public files like /favicon.ico, /robots.txt, etc.
   const reservedSlugs = ['favicon.ico', 'robots.txt', 'sitemap.xml', 'og.png'];
   if (reservedSlugs.includes(slug)) return notFound();
 
@@ -46,12 +45,22 @@ export default async function CardPage({ params }: PageProps) {
 
 export const dynamic = 'force-dynamic';
 
-export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   return [];
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const card = await getCardBySlug(params.slug);
+  const { slug } = params;
+
+  const reservedSlugs = ['favicon.ico', 'robots.txt', 'sitemap.xml', 'og.png'];
+  if (reservedSlugs.includes(slug)) {
+    return {
+      title: 'Reserved File',
+      description: 'This is a reserved path.',
+    };
+  }
+
+  const card = await getCardBySlug(slug);
   if (!card) {
     return {
       title: 'Card not found',
