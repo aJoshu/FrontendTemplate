@@ -1,18 +1,16 @@
+// src/app/[slug]/page.tsx
 import { getCardBySlug } from '@/api/card/getCardBySlug';
 import DefaultCard from '../templates/card/default';
 import { lightenHexColor } from '@/components/lightenHexColor';
 import { notFound } from 'next/navigation';
 
-type PageProps = {
-  params: { slug: string }; // ✅ no Promise
-};
-
 const reservedSlugs = ['favicon.ico', 'robots.txt', 'sitemap.xml', 'og.png'];
 
-export default async function CardPage({ params }: PageProps) {
+export const dynamic = 'force-dynamic';
+
+export default async function CardPage({ params }: any) {
   const { slug } = params;
 
-  // prevent static file routes from triggering this page
   if (reservedSlugs.includes(slug)) return notFound();
 
   const card = await getCardBySlug(slug);
@@ -48,33 +46,44 @@ export default async function CardPage({ params }: PageProps) {
   );
 }
 
-export const dynamic = 'force-dynamic';
-
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
+export async function generateStaticParams() {
   return [];
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const card = await getCardBySlug(params.slug);
+// 🚨 Use `any` or just avoid overtyping `params`
+export async function generateMetadata({ params }: any) {
+  const { slug } = params;
 
-  if (!card) {
-    return { title: 'Card not found' };
+  if (reservedSlugs.includes(slug)) {
+    return { title: 'Projct' };
   }
 
+  const card = await getCardBySlug(slug);
+  if (!card) return { title: 'Card not found' };
+
   return {
-    title: card.title || 'Shared card',
-    description: card.description || 'Check out this card',
+    title: card.title,
+    description: card.description,
     openGraph: {
       title: card.title,
       description: card.description,
       url: `https://projct.dev/${card.slug}`,
       siteName: 'Projct',
       type: 'website',
+      images: [
+        {
+          url: `https://projct.dev/api/og/${card.slug}`,
+          width: 1200,
+          height: 630,
+          alt: card.title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: card.title,
       description: card.description,
+      images: [`https://projct.dev/api/og/${card.slug}`],
     },
   };
 }
