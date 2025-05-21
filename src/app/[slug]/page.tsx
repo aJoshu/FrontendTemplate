@@ -4,13 +4,15 @@ import { lightenHexColor } from '@/components/lightenHexColor';
 import { notFound } from 'next/navigation';
 
 type PageProps = {
-  params: { slug: string };
+  params: { slug: string }; // ✅ no Promise
 };
+
+const reservedSlugs = ['favicon.ico', 'robots.txt', 'sitemap.xml', 'og.png'];
 
 export default async function CardPage({ params }: PageProps) {
   const { slug } = params;
 
-  const reservedSlugs = ['favicon.ico', 'robots.txt', 'sitemap.xml', 'og.png'];
+  // prevent static file routes from triggering this page
   if (reservedSlugs.includes(slug)) return notFound();
 
   const card = await getCardBySlug(slug);
@@ -21,7 +23,10 @@ export default async function CardPage({ params }: PageProps) {
       <div
         className="flex justify-center items-center min-h-screen"
         style={{
-          background: `linear-gradient(145deg, ${lightenHexColor(card.bgColor, 10)}, ${lightenHexColor(card.bgColor, 30)})`,
+          background: `linear-gradient(145deg, ${lightenHexColor(
+            card.bgColor,
+            10
+          )}, ${lightenHexColor(card.bgColor, 30)})`,
         }}
       >
         <DefaultCard
@@ -50,26 +55,15 @@ export async function generateStaticParams(): Promise<{ slug: string }[]> {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+  const card = await getCardBySlug(params.slug);
 
-  const reservedSlugs = ['favicon.ico', 'robots.txt', 'sitemap.xml', 'og.png'];
-  if (reservedSlugs.includes(slug)) {
-    return {
-      title: 'Reserved File',
-      description: 'This is a reserved path.',
-    };
-  }
-
-  const card = await getCardBySlug(slug);
   if (!card) {
-    return {
-      title: 'Card not found',
-    };
+    return { title: 'Card not found' };
   }
 
   return {
-    title: card.title || 'Projct Card',
-    description: card.description || 'Check out this project showcase',
+    title: card.title || 'Shared card',
+    description: card.description || 'Check out this card',
     openGraph: {
       title: card.title,
       description: card.description,
