@@ -441,7 +441,7 @@ export default function DefaultCard({
                     {!editor && (
                         <div className="absolute bottom-2 w-full text-center">
                             <a
-                                href="https://projct.dev"
+                                href={`https://projct.dev${bottomText === 'Create in 3 clicks' ? '/create' : ''}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-xs font-semibold tracking-wide opacity-60 hover:opacity-100 transition"
