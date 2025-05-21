@@ -12,6 +12,12 @@ export default async function CardPage({ params }: PageProps) {
   const card = await getCardBySlug(slug);
 
   if (!card) return notFound();
+  
+  const reservedSlugs = ['favicon.ico', 'robots.txt', 'sitemap.xml', 'og.png'];
+  if (reservedSlugs.includes(slug)) {
+    return notFound(); // Or redirect, if you prefer
+  }
+
 
   return (
     <div className="overflow-hidden">
