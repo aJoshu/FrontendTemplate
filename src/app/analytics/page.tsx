@@ -21,6 +21,7 @@ import { getCardAnalytics } from "@/api/card/getCardAnalytics";
 import Login from "../login/page";
 import { useAuth } from "../context/AuthContext";
 import { LOCAL_URL } from "@/constants/Network";
+import { motion } from "framer-motion";
 
 function groupByDay(viewsRaw: any[], range: string) {
   const views = Array.isArray(viewsRaw) ? viewsRaw : [];
@@ -56,7 +57,7 @@ function getTopClickedProjects(clicks: any[]) {
 export default function AnalyticsDashboard() {
   const [range, setRange] = useState("24h");
   const [loading, setLoading] = useState(true);
-  const [cardId, setCardId] = useState('string');
+  const [cardId, setCardId] = useState('');
   const [analytics, setAnalytics] = useState<{ views: any[]; clicks: any[] }>({ views: [], clicks: [] });
   const { user } = useAuth();
   const wasAuthenticated = typeof window !== "undefined" && localStorage.getItem("wasAuthenticated") === "true";
@@ -85,6 +86,29 @@ export default function AnalyticsDashboard() {
   if (!user && !wasAuthenticated) {
     localStorage.setItem("redirectPath", "/analytics");
     return <Login />;
+  }
+
+  if (!cardId) {
+    return (
+      <div className="relative min-h-[calc(100vh-60px)] flex items-center">
+        <Container size="xl" px="md" ta='center'>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
+          >
+            <Stack gap="md">
+              <Title order={1} fw={900} lh={1.2}>
+                Analytics
+              </Title>
+              <Text size="md" c="dimmed">
+                No analytics available yet, please come back later.
+              </Text>
+            </Stack>
+          </motion.div>
+        </Container>
+      </div>
+    );
   }
 
   return (

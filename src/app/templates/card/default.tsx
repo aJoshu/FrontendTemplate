@@ -219,15 +219,22 @@ export default function DefaultCard({
                         <Textarea
                             value={loading ? '' : description}
                             onChange={(e) => {
-                                const value = e.target.value.slice(0, 60);
+                                const rawValue = e.target.value;
+                                const lineBreaks = (rawValue.match(/\n/g) || []).length;
+
+                                if (lineBreaks >= 2) return; // prevent more than 2 line breaks
+
+                                const value = rawValue.slice(0, 60);
                                 setDescription?.(value);
                             }}
+
                             autoCorrect="off"
                             spellCheck={false}
+                            autosize
                             size="sm"
                             maxLength={50}
                             variant="unstyled"
-                            minRows={2}
+                            minRows={1}
                             maxRows={3}
                             className="mt-1 w-full max-w-[280px] mx-auto"
                             styles={{
@@ -282,7 +289,7 @@ export default function DefaultCard({
                     <div
                         className="overflow-y-auto flex flex-col items-center text-center px-4 py-2"
                         style={{ maxHeight: 'calc(100% - 160px)', scrollbarWidth: 'thin' }}
-                    >                        <Stack gap="sm" className="w-full max-w-[280px]" style={{ marginTop: !editor ? 25 : 0 }}>
+                    >                        <Stack gap="sm" className="w-full max-w-[280px]">
                             {projects.map((project, index) => (
                                 <motion.div
                                     key={index}
@@ -408,7 +415,7 @@ export default function DefaultCard({
                                 </ActionIcon>
                             )}
                         </Stack>
-                        {showGit && <GitHubWidget githubUsername={githubUsername}/>}
+                        {showGit && <GitHubWidget githubUsername={githubUsername} />}
                     </div>
                     {editor && projects.length < 8 && (
 

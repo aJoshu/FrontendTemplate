@@ -98,8 +98,8 @@ export default function Home() {
               title="Projct"
               description="All your links in one place"
               projects={[
-                { title: "Create Link", link: "brainstorm.gg" },
-                { title: "Follow us", link: "x.com" },
+                { title: "Create Link", link: "https://brainstorm.gg" },
+                { title: "Follow us", link: "https://x.com/JoshMcrk" },
               ]}
               editor={false}
               effect={theme.effect}
