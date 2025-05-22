@@ -3,68 +3,9 @@
 import { AppShell, Button, Container, Stack, Text, Title } from "@mantine/core";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import DefaultCard from "./templates/card/default"; // Adjust path if needed
 
-
-type ButtonRadius = "xs" | "sm" | "md" | "lg" | "xl";
-
-type Theme = {
-  bgColor: string;
-  buttonColor: string;
-  effect: string;
-  buttonRadius: ButtonRadius;
-  showGit: boolean;
-  githubUsername: string;
-};
-
-
-const PRESET_THEMES: Theme[] = [
-  {
-    bgColor: "#ffffff",
-    buttonColor: "#ef4444",
-    effect: "static-pyramid",
-    buttonRadius: "sm",
-    showGit: false,
-    githubUsername: '',
-  },
-  {
-    bgColor: "#0f172a",
-    buttonColor: "#facc15",
-    effect: "none",
-    buttonRadius: "md",
-    showGit: true,
-    githubUsername: 'aJoshu',
-  },
-  {
-    bgColor: "#3b82f6",
-    buttonColor: "#f5f5f5",
-    effect: "animate-sheen",
-    buttonRadius: "xl",
-    showGit: false,
-    githubUsername: '',
-  },
-  {
-    bgColor: "#f43f5e",
-    buttonColor: "#ffffff",
-    effect: "animate-comic-lines",
-    buttonRadius: "sm",
-    showGit: false,
-    githubUsername: '',
-  },
-];
 
 export default function Home() {
-  const [themeIndex, setThemeIndex] = useState(0);
-  const theme = PRESET_THEMES[themeIndex];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setThemeIndex((prev) => (prev + 1) % PRESET_THEMES.length);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <AppShell header={{ height: 60 }} padding="md">
@@ -79,10 +20,10 @@ export default function Home() {
           >
             <Stack gap="md">
               <Title order={1} size={48} fw={900} lh={1.2}>
-                Share your side projects<br />in one beautiful link.
+                Clean frontend Template
               </Title>
               <Text size="md" c="dimmed">
-                Build a simple, customizable link-in-bio page just for your work. Designed for professionals.
+                Next, Mantine, framer-motion, tailwind frontend template by aJoshu
               </Text>
               <motion.a
                 style={{ width: "240px" }}
@@ -90,9 +31,9 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.3 }}
               >
-                <Link href="/create">
+                <Link href="/dashboard">
                   <Button fullWidth radius="xl" h={48}>
-                    Create Link
+                    Action Button
                   </Button>
                 </Link>
               </motion.a>
@@ -106,39 +47,8 @@ export default function Home() {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2, duration: 0.5, ease: "easeOut" }}
         >
-          <div className="hidden xl:block absolute right-[20vw] top-1/2 -translate-y-1/2 w-[350px] drop-shadow-md">
-            <DefaultCard
-              title="Projct"
-              description="All your links in one place"
-              projects={[
-                { title: "Create Link", link: "https://www.projct.dev/create" },
-                { title: "Follow us", link: "https://x.com/JoshMcrk" },
-              ]}
-              editor={false}
-              effect={theme.effect}
-              bgColor={theme.bgColor}
-              buttonColor={theme.buttonColor}
-              buttonRadius={theme.buttonRadius}
-              showGit={theme.showGit}
-              githubUsername={theme.githubUsername}
-              bottomText="Create in 3 clicks"
-              size="full"
-              cardId={""}
-            />
-          </div>
         </motion.div>
       </div>
-      <a
-        href="https://www.producthunt.com/posts/projct-dev-link-in-bio?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-projct&#0045;dev&#0045;link&#0045;in&#0045;bio"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=968602&theme=light&t=1747868600349"
-          alt="Projct&#0046;dev&#0032;Link&#0045;In&#0045;Bio - Showcase&#0032;your&#0032;side&#0032;projects&#0032;in&#0032;one&#0032;beautiful&#0032;card | Product Hunt"
-          style={{ width: 250, height: 54 }}
-        />
-      </a>
     </AppShell>
   );
 }

@@ -1,5 +1,7 @@
-import CreatePage from "../create/page";
+import { Text } from "@mantine/core";
 
 export default function DashboardPage() {
-  return <CreatePage />
+  return(
+    <Text>Dashboard</Text>
+  )
 }

@@ -110,7 +110,7 @@ export default function Navbar() {
                 }}
                 className="font-bold text-lg"
               >
-                Projct.dev
+                TemplateName
               </span>
             </Link>
 
